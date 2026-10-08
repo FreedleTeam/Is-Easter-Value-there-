@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Purchase Price Analysis | 22197 E Easter Circle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Libre+Franklin:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#163049; --teal:#277782; --slate:#566675; --mist:#ECF3F5;
+  --bg:#FFFFFF; --panel:#F5F9FA; --fg:#163049; --muted:#566675; --line:#D6E2E7;
+  --data:#163049; --ink:#277782; --up:#277782; --down:#A3624F; --accent:#277782;
+  --c-finishes:#163049; --c-golf:#277782; --c-road:#8C9EAD; --c-basement:#C9923D;
+  --c-size:#6E9478; --c-garage:#A3624F; --c-agelot:#BCC8D0;
+  --sans:"Libre Franklin","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --hand:"Caveat","Segoe Print","Bradley Hand","Comic Sans MS",cursive;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F1D2B; --panel:#152737; --fg:#E4EDF2; --muted:#9DB0BE; --line:#27405A;
+    --mist:#1A2F44; --data:#A9C6DE; --ink:#7CCBD4; --up:#5FB7C1; --down:#D9947E; --accent:#5FB7C1;
+    --c-finishes:#A9C6DE; --c-golf:#5FB7C1; --c-road:#7E93A5; --c-basement:#D9A85A;
+    --c-size:#8FB59A; --c-garage:#D08F7A; --c-agelot:#4E6273;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F1D2B; --panel:#152737; --fg:#E4EDF2; --muted:#9DB0BE; --line:#27405A;
+  --mist:#1A2F44; --data:#A9C6DE; --ink:#7CCBD4; --up:#5FB7C1; --down:#D9947E; --accent:#5FB7C1;
+  --c-finishes:#A9C6DE; --c-golf:#5FB7C1; --c-road:#7E93A5; --c-basement:#D9A85A;
+  --c-size:#8FB59A; --c-garage:#D08F7A; --c-agelot:#4E6273;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:17px;line-height:1.6;
+  font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-underline-offset:3px}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:3px}
+img,svg{max-width:100%}
+
+.page{position:relative;max-width:1120px;margin:0 auto;padding:0 28px 80px}
+#ink{position:absolute;left:0;top:0;pointer-events:none;z-index:3;overflow:visible}
+#ink path{fill:none;stroke:var(--ink);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* layout: reading column + margin for notes */
+.row{display:grid;grid-template-columns:minmax(0,1fr) 270px;gap:48px;align-items:start}
+.prose{max-width:66ch}
+.prose p{margin:0 0 1em}
+h1,h2,h3{font-weight:700;letter-spacing:-0.015em;line-height:1.15;margin:0}
+h2{font-size:clamp(1.55rem,1.2rem + 1.2vw,2.1rem);margin-bottom:.6em}
+h3{font-size:1.15rem;margin-bottom:.5em}
+section{padding:64px 0 8px;border-top:1px solid var(--line);margin-top:56px}
+.sub{color:var(--muted)}
+.small{font-size:.86rem;color:var(--muted);line-height:1.5}
+
+/* handwritten notes */
+.note{font-family:var(--hand);color:var(--ink);font-size:1.42rem;line-height:1.12;font-weight:500;
+  transform:rotate(-1.6deg);max-width:250px;position:relative;z-index:4;margin:0}
+.note.tilt-r{transform:rotate(1.4deg)}
+.note b{font-weight:600}
+.note .hl{background:linear-gradient(transparent 58%, color-mix(in srgb, var(--ink) 22%, transparent) 58%);padding:0 2px}
+
+/* masthead */
+.masthead{padding:56px 0 8px}
+.masthead h1{font-size:clamp(2.3rem,1.6rem + 3vw,3.6rem);letter-spacing:-0.03em;margin-bottom:.25em}
+.addr{font-size:1.05rem;color:var(--muted);margin:0 0 1.4em}
+.terms{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:2px solid var(--fg);margin:28px 0 0;max-width:760px}
+.terms div{padding:14px 18px 0 0}
+.terms dt{font-size:.85rem;color:var(--muted);margin-bottom:2px}
+.terms dd{margin:0;font-size:clamp(1.3rem,1rem + 1vw,1.75rem);font-weight:600;letter-spacing:-0.02em}
+.terms .minus{color:var(--muted);font-weight:500}
+
+/* hero position chart */
+.position h2{max-width:20ch}
+.hero-notes{display:flex;gap:40px;align-items:flex-end;min-height:96px;margin:18px 0 34px;padding-left:2%}
+.hero-notes .note{max-width:230px}
+.strip-wrap{position:relative}
+#strip{display:block;width:100%;height:auto;overflow:visible}
+#strip text{font-family:var(--sans);fill:var(--muted);font-size:12px}
+#strip .lbl{fill:var(--fg);font-weight:500}
+#strip .dot{cursor:pointer}
+#strip .dot circle{transition:fill .2s, stroke .2s}
+.readout{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 28px;margin:16px 0 18px;padding:16px 20px;background:var(--panel);border-left:3px solid var(--accent)}
+.readout strong{font-size:1.4rem;letter-spacing:-0.02em}
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 10px}
+.controls .lab{font-size:.85rem;color:var(--muted);width:100%;margin-bottom:2px}
+.chip{font:inherit;font-size:.85rem;border:1px solid var(--line);background:var(--bg);color:var(--fg);padding:6px 12px;border-radius:999px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.chip.off{color:var(--muted);text-decoration:line-through}
+.preset{font:inherit;font-size:.85rem;background:none;border:none;color:var(--accent);padding:6px 4px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+
+/* up/down explainer */
+.updown{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:26px 0 8px;max-width:720px}
+.ud{padding:16px 18px;border:1px solid var(--line);border-radius:4px;background:var(--bg)}
+.ud .dir{display:flex;align-items:center;gap:10px;font-weight:700;margin-bottom:4px}
+.ud .arrow{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;color:#fff;font-size:15px;line-height:1}
+.ud.down .arrow{background:var(--down)} .ud.up .arrow{background:var(--up)}
+.ud p{margin:0;font-size:.93rem;color:var(--muted)}
+
+/* explorer */
+.explorer{display:grid;grid-template-columns:240px minmax(0,1fr);gap:0;margin-top:30px;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--bg)}
+.comp-list{display:flex;flex-direction:column;border-right:1px solid var(--line);background:var(--panel)}
+.comp-btn{font:inherit;text-align:left;border:0;border-bottom:1px solid var(--line);background:transparent;color:var(--fg);padding:11px 16px;cursor:pointer;display:flex;justify-content:space-between;gap:8px;font-size:.9rem}
+.comp-btn span:last-child{color:var(--muted)}
+.comp-btn[aria-pressed="true"]{background:var(--bg);box-shadow:inset 3px 0 0 var(--accent);font-weight:600}
+.comp-btn[aria-pressed="true"] span:last-child{color:var(--fg)}
+.detail{padding:24px 26px 28px;min-width:0}
+.detail h3{font-size:1.3rem;margin-bottom:.15em}
+.specs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:16px 0 20px}
+.specs div{border-top:1px solid var(--line);padding-top:6px}
+.specs dt{font-size:.78rem;color:var(--muted)}
+.specs dd{margin:0;font-weight:600}
+.wf-row-wrap{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:36px;align-items:center}
+.wf{display:grid;grid-template-columns:minmax(110px,36%) minmax(0,1fr) 78px;row-gap:3px;font-size:.86rem}
+.wf .l{padding:5px 10px 5px 0;line-height:1.25;align-self:center}
+.wf .t{position:relative;height:28px;align-self:center}
+.wf .v{text-align:right;align-self:center;font-weight:500;padding-left:8px}
+.wf .bar{position:absolute;top:5px;height:18px;border-radius:2px;transition:left .35s ease,width .35s ease}
+.wf .bar.total{background:var(--mist);border:1px solid var(--line)}
+.wf .bar.final{background:var(--data);border:0}
+.wf .bar.pos{background:var(--up)} .wf .bar.neg{background:var(--down)} .wf .bar.conc{background:var(--c-agelot)}
+.wf .ref{position:absolute;top:-2px;bottom:-2px;border-left:2px dashed var(--accent);opacity:.7}
+.wf .is-total{font-weight:700}
+.wf .sep{grid-column:1/-1;border-top:1px solid var(--line);margin:3px 0}
+.wf-legend{display:flex;flex-wrap:wrap;gap:4px 18px;font-size:.8rem;color:var(--muted);margin:12px 0 0}
+.wf-legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.why{margin:20px 0 0;padding:14px 0 0;border-top:1px solid var(--line)}
+.why p{margin:0}
+
+/* table */
+.tbl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:.95rem;min-width:620px}
+th{text-align:left;font-weight:600;font-size:.82rem;color:var(--muted);padding:0 12px 10px 0;border-bottom:2px solid var(--fg);white-space:nowrap}
+th button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+th button[data-dir]::after{content:attr(data-dir);margin-left:4px}
+td{padding:12px 12px 12px 0;border-bottom:1px solid var(--line);vertical-align:middle;white-space:nowrap}
+td.num,th.num{text-align:right}
+.adj-pos{color:var(--up);font-weight:600} .adj-neg{color:var(--down);font-weight:600}
+.minibar{display:inline-block;height:8px;border-radius:1px;vertical-align:middle;margin-left:10px;background:var(--data);opacity:.85}
+tfoot td{font-weight:700;border-bottom:0;border-top:2px solid var(--fg)}
+.flag{display:inline-block;font-size:.72rem;font-weight:600;color:var(--down);border:1px solid currentColor;border-radius:3px;padding:0 5px;margin-left:8px;vertical-align:1px}
+
+/* patterns */
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 18px}
+.legend button{font:inherit;font-size:.84rem;display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--bg);color:var(--fg);padding:6px 12px 6px 10px;border-radius:4px;cursor:pointer}
+.legend button i{width:11px;height:11px;border-radius:2px;display:inline-block}
+.legend button span{color:var(--muted)}
+.legend button[aria-pressed="true"]{border-color:var(--fg);box-shadow:inset 0 0 0 1px var(--fg)}
+.div-chart{display:grid;grid-template-columns:minmax(100px,170px) minmax(0,1fr) 72px;row-gap:6px;font-size:.86rem;align-items:center}
+.div-chart .t{position:relative;height:24px}
+.div-chart .axis{position:absolute;top:-4px;bottom:-4px;left:50%;border-left:1px solid var(--fg)}
+.seg{position:absolute;top:3px;height:18px;transition:opacity .2s}
+.seg.dim{opacity:.13}
+.div-chart .v{text-align:right;font-weight:600}
+.div-scale{display:flex;justify-content:space-between;font-size:.75rem;color:var(--muted);grid-column:2}
+
+/* riviera */
+.riv{display:grid;grid-template-columns:minmax(0,1fr) 270px;gap:48px;align-items:start}
+.askline{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin:6px 0 18px}
+.askline s{color:var(--muted);font-size:1.1rem}
+.askline strong{font-size:1.6rem;letter-spacing:-0.02em}
+.sim{background:var(--panel);padding:20px 22px;border-radius:4px;margin-top:8px}
+.sim label{display:block;font-weight:600;font-size:.92rem;margin-bottom:8px}
+.sim input[type=range]{width:100%;accent-color:var(--accent)}
+.eq{font-size:1.15rem;margin:12px 0 14px}
+.eq b{font-size:1.45rem}
+#riv-scale{display:block;width:100%;height:auto;overflow:visible}
+#riv-scale text{font-family:var(--sans);font-size:11.5px;fill:var(--muted)}
+
+/* closing */
+.conclusion{background:var(--panel);border-top:0;padding:48px 40px 40px;margin-top:64px;border-radius:6px}
+.figs{display:flex;flex-wrap:wrap;gap:12px 40px;margin:22px 0 4px}
+.figs div{min-width:140px}
+.figs dt{font-size:.82rem;color:var(--muted)}
+.figs dd{margin:0;font-size:1.35rem;font-weight:700;letter-spacing:-0.02em}
+.disclaimer{margin-top:28px;padding-top:18px;border-top:1px solid var(--line)}
+
+#tip{position:fixed;z-index:20;pointer-events:none;background:var(--fg);color:var(--bg);font-size:.8rem;line-height:1.35;padding:7px 10px;border-radius:4px;max-width:240px;opacity:0;transition:opacity .12s}
+
+@media (max-width:860px){
+  .row,.riv,.wf-row-wrap{grid-template-columns:1fr;gap:18px}
+  .row .note,.riv .note,.wf-row-wrap .note{justify-self:end;margin-right:6px}
+  .explorer{grid-template-columns:1fr}
+  .comp-list{flex-direction:row;overflow-x:auto;border-right:0;border-bottom:1px solid var(--line)}
+  .comp-btn{flex:0 0 auto;flex-direction:column;border-bottom:0;border-right:1px solid var(--line);gap:0}
+  .comp-btn[aria-pressed="true"]{box-shadow:inset 0 -3px 0 var(--accent)}
+}
+@media (max-width:600px){
+  body{font-size:16px}
+  .page{padding:0 18px 60px}
+  .terms{grid-template-columns:1fr;border-top-width:1px}
+  .terms div{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--line);padding:10px 0}
+  .updown{grid-template-columns:1fr}
+  .specs{grid-template-columns:repeat(2,1fr)}
+  .detail{padding:18px 16px 22px}
+  .hero-notes{gap:14px;padding-left:0;min-height:0;align-items:flex-end;margin-bottom:12px}
+  .hero-notes .note{font-size:1.12rem;max-width:50%}
+  .conclusion{padding:32px 20px}
+  .div-chart{grid-template-columns:86px minmax(0,1fr) 60px;font-size:.78rem}
+  .note{font-size:1.3rem}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{.controls,.legend,.sim input{display:none}section{break-inside:avoid}}
+</style>
+</head>
+<body>
+<div class="page" id="page">
+<svg id="ink" aria-hidden="true"></svg>
+
+<header class="masthead">
+  <h1>Purchase Price Analysis</h1>
+  <p class="addr">22197 E Easter Circle, Saddle Rock Golf Club, Aurora, CO 80016<br>October 8, 2026</p>
+  <div class="prose"><p>This analysis evaluates how the agreed purchase price compares with nearby closed sales after accounting for meaningful differences in size, condition, location, lots, garages, and basement finish.</p></div>
+  <dl class="terms">
+    <div><dt>Agreed purchase price</dt><dd>$980,000</dd></div>
+    <div><dt>Seller credit</dt><dd class="minus">−$26,500</dd></div>
+    <div><dt>Purchase price less credit</dt><dd>$953,500</dd></div>
+  </dl>
+</header>
+
+<section class="position" id="position" style="border-top:0;margin-top:24px">
+  <h2>Your price sits $70,500 below the median adjusted value</h2>
+  <p class="sub prose" style="margin:0">Each dot is one closed sale, adjusted to Easter Circle. Tap a dot or a name below to leave it out and see how the median moves.</p>
+
+  <div class="hero-notes">
+    <p class="note" id="note-credit" data-target="#mk-net" data-bend="-1">With the <b>$26,500</b> credit, it works out to <b>$953,500</b>. The recorded price stays $980,000.</p>
+    <p class="note tilt-r" id="note-contract" data-target="#mk-contract" data-bend="1">Your price. <span class="hl" id="above-count">6 of the 8</span> adjusted sales landed above it.</p>
+  </div>
+
+  <div class="strip-wrap" id="strip-wrap"><svg id="strip" role="img" aria-label="Adjusted values of the eight closed sales compared with the contract price and median"></svg></div>
+
+  <div class="readout" aria-live="polite">
+    <div><span class="small">Median of selected sales</span><br><strong id="ro-median">$1,050,500</strong></div>
+    <div><span class="small">Sales included</span><br><strong id="ro-n">8</strong></div>
+    <div><span class="small">Your $980,000 price versus that median</span><br><strong id="ro-gap">$70,500 below</strong></div>
+  </div>
+  <div class="controls" id="chips"><span class="lab">Include or exclude sales</span></div>
+  <div class="controls">
+    <button class="preset" data-preset="all">All eight sales</button>
+    <button class="preset" data-preset="nogolf">Only sales with no golf-course adjustment</button>
+    <button class="preset" data-preset="trim">Drop the highest and lowest</button>
+  </div>
+</section>
+
+<section id="takeaway">
+  <h2>The main takeaway</h2>
+  <div class="prose">
+    <p>The median adjusted value of the eight closed sales is <strong>$1,050,500</strong>. Your contract price of $980,000 is <strong>$70,500 below that median</strong>. That is an encouraging position, especially since this home has some dated finishes and backs toward Easter and Shawnee. Both could influence how certain buyers perceive the home in the future. The seller credit offers an additional $26,500 in transaction benefit, bringing the price-less-credit comparison to $953,500, although the recorded purchase price remains $980,000.</p>
+    <p>I am pleased that we are buying below the adjusted median rather than paying for a premium golf-course setting or a completely remodeled interior that this home does not have. That distinction is an important part of the value argument.</p>
+  </div>
+</section>
+
+<section id="meaning">
+  <h2>What an adjusted value means</h2>
+  <div class="prose">
+    <p>Every sold property has advantages and disadvantages compared with Easter Circle. I start with what each home actually sold for, account for seller concessions, and then estimate the dollar impact of meaningful differences. <strong>The adjusted value is my opinion of what that particular sale suggests 22197 E Easter Circle should be worth if the properties were made comparable.</strong></p>
+  </div>
+  <div class="updown">
+    <div class="ud down"><div class="dir"><span class="arrow" aria-hidden="true">↓</span>Adjusted down</div><p>The sold home had something Easter Circle doesn't, like dramatically better finishes or a golf-course view.</p></div>
+    <div class="ud up"><div class="dir"><span class="arrow" aria-hidden="true">↑</span>Adjusted up</div><p>The sold home lacked something Easter Circle has, like a finished basement.</p></div>
+  </div>
+  <div class="prose"><p class="small" style="margin-top:14px">These adjustments are reasoned market estimates, not actual remodeling bids or a formal appraisal. The adjusted prices vary, so the median is a useful reference point rather than a promise of exact market value.</p></div>
+
+  <div class="explorer" id="explorer">
+    <div class="comp-list" id="comp-list" role="group" aria-label="Choose a closed sale"></div>
+    <div class="detail" id="detail">
+      <h3 id="d-name"></h3>
+      <a id="d-link" href="#" target="_blank" rel="noopener" class="small">View on Zillow</a>
+      <dl class="specs" id="d-specs"></dl>
+      <div class="wf-row-wrap">
+        <div>
+          <div class="wf" id="wf" aria-label="Path from closing price to adjusted value"></div>
+          <div class="wf-legend">
+            <span><i style="background:var(--up)"></i>Adjusted up</span>
+            <span><i style="background:var(--down)"></i>Adjusted down</span>
+            <span><i style="background:var(--c-agelot)"></i>Seller concessions</span>
+            <span><i style="border-left:2px dashed var(--accent);width:0;border-radius:0"></i>Your $980,000 price</span>
+          </div>
+        </div>
+        <p class="note" id="note-adjusted" data-target="#wf-final" data-bend="1">This last bar is the <b>adjusted value</b>: what this one sale suggests Easter Circle is worth once the two homes are made comparable. My opinion, not an appraisal.</p>
+      </div>
+      <div class="why"><p><strong>Why it matters:</strong> <span id="d-why"></span></p></div>
+    </div>
+  </div>
+</section>
+
+<section id="closed">
+  <h2>Closed sales side by side</h2>
+  <div class="row">
+    <div class="prose">
+      <p><strong>Net closing price</strong> is the published sold price minus seller concessions reported in the MLS, such as credits toward closing costs or financing. Zillow typically displays the gross recorded sale price, not the net price after these concessions. This distinction is especially important for the Quemoy and Valdai sales.</p>
+    </div>
+  </div>
+  <div class="row" style="margin-top:10px">
+    <div class="tbl-scroll">
+      <table id="tbl">
+        <thead><tr>
+          <th><button data-sort="addr">Closed comparable</button></th>
+          <th class="num"><button data-sort="net">Net closing price</button></th>
+          <th class="num"><button data-sort="total">Total adjustments</button></th>
+          <th><button data-sort="adjusted">Adjusted value</button></th>
+        </tr></thead>
+        <tbody></tbody>
+        <tfoot><tr><td colspan="3">Median adjusted value</td><td id="tf-median">$1,050,500</td></tr></tfoot>
+      </table>
+    </div>
+    <p class="note tilt-r" id="note-zillow" data-target="#net-quemoy" data-bend="-1">Zillow shows Quemoy at <b>$1,210,000</b> and Valdai at <b>$988,000</b>. Those are gross prices, before the seller concessions.</p>
+  </div>
+  <p class="small">Select any address to open its Zillow page. Closing prices and seller concessions are taken from REcolorado MLS records. Sort by any column heading.</p>
+</section>
+
+<section id="patterns">
+  <h2>What moves the numbers</h2>
+  <div class="prose"><p>Every adjustment from the eight sales, grouped by type. Bars to the left of the line pulled a sale's price down toward Easter Circle; bars to the right pushed it up. Select a type to isolate it.</p></div>
+  <div class="legend" id="legend"></div>
+  <div class="div-chart" id="divchart"></div>
+  <p class="small" style="margin-top:14px">Grouping is for readability only. Each adjustment is shown exactly as listed in the individual sale details above.</p>
+</section>
+
+<section id="riviera">
+  <h2>Additional market context: 6536 S Riviera Way</h2>
+  <div class="riv">
+    <div class="prose">
+      <div class="askline"><s>$1,550,000</s><strong id="riv-ask">$1,400,000 asking</strong><span class="small">131 days on market as of the October 8 MLS report</span></div>
+      <p><a href="https://www.zillow.com/homedetails/6536-S-Riviera-Way-Aurora-CO-80016/13122397_zpid/" target="_blank" rel="noopener">View the Zillow listing.</a> This extensively updated golf-course home illustrates the price sellers are seeking for substantially renovated properties, but an asking price is not a completed sale. Therefore it is not included in the median.</p>
+    </div>
+    <p class="note" id="note-ask" data-target="#riv-ask" data-bend="-1">An asking price, not a sale. It stays out of the median.</p>
+  </div>
+  <div class="sim">
+    <label for="riv-slider">If it eventually sold at <span id="riv-sale">$1,275,000</span></label>
+    <input type="range" id="riv-slider" min="1200000" max="1400000" step="5000" value="1275000" aria-describedby="riv-eq">
+    <p class="eq" id="riv-eq"></p>
+    <svg id="riv-scale" aria-hidden="true"></svg>
+    <p class="small" style="margin:12px 0 0">As a rough scenario, if it sold at $1.25M–$1.30M and its combined upgrades, location and other advantages represented $350,000 relative to Easter Circle, it would suggest about $900K–$950K (shaded). This is a hypothetical cross-check only, not evidence of an actual sale or a separate valuation.</p>
+  </div>
+</section>
+
+<section id="road">
+  <h2>Understanding the road location and future resale</h2>
+  <div class="prose">
+    <p>Easter Circle has a much larger lot than these comparisons, substantial finished living space, and a finished basement. Its setting also places it near Easter and Shawnee. Some buyers are especially sensitive to roads behind or alongside a home, while others may not view that as a major concern. It does not mean the home is necessarily less enjoyable to live in; it simply may narrow the buyer pool or affect price expectations when it is resold.</p>
+    <p>That is why buying below the adjusted median matters here. We are not paying the same price as though this home had a golf-course view or high-end, move-in-ready updates. This provides a more defensible starting point today, although future appreciation, condition, and resale results can never be guaranteed.</p>
+  </div>
+</section>
+
+<section class="conclusion" id="conclusion">
+  <h2>Conclusion</h2>
+  <div class="prose">
+    <p>Considering the closed-sale comparisons as a group, I believe the $980,000 contract price is well supported as a reasonable purchase. Several relevant adjusted sales are near or above the agreed price, including Costilla at $990,000 and Sicily at $1,035,000. The overall median of $1,050,500 is higher still. We are entering the purchase at a level that recognizes this home's road proximity and opportunities for cosmetic improvement, with a meaningful seller credit improving the overall purchase terms.</p>
+  </div>
+  <dl class="figs">
+    <div><dt>Contract price</dt><dd>$980,000</dd></div>
+    <div><dt>Median adjusted value</dt><dd>$1,050,500</dd></div>
+    <div><dt>Below the median</dt><dd>$70,500</dd></div>
+    <div><dt>Seller credit</dt><dd>$26,500</dd></div>
+  </dl>
+  <div class="disclaimer small">
+    <p>The range of adjusted indications is relatively wide. This is an informed comparative market analysis, not an appraisal or guarantee of future sale price. A licensed appraiser could reach a different conclusion, and the property condition and road impacts remain matters of market judgment.</p>
+    <p style="margin-bottom:0">Data sources: REcolorado Broker 1 sheets supplied October 8, 2026; reported concessions and property measurements from those MLS sheets. Zillow links are provided for visual property reference and public sale history.</p>
+  </div>
+</section>
+</div>
+<div id="tip" role="tooltip"></div>
+
+<script>
+(function(){
+const CONTRACT=980000, CREDIT=26500, NET=CONTRACT-CREDIT;
+const CAT={
+  finishes:{name:"Finishes & condition"}, golf:{name:"Golf course"}, road:{name:"Road & rear setting"},
+  basement:{name:"Basement"}, size:{name:"Size & layout"}, garage:{name:"Garage"}, agelot:{name:"Age & lot"}
+};
+const comps=[
+ {id:"costilla",short:"Costilla",addr:"22199 E Costilla Drive",url:"https://www.zillow.com/homedetails/22199-E-Costilla-Dr-Aurora-CO-80016/13122642_zpid/",year:2001,ag:3815,fin:5115,acre:.22,sold:1150000,conc:0,
+  adj:[[35000,"Size","size"],[-30000,"Flooring","finishes"],[-75000,"Kitchen/baths","finishes"],[-50000,"Overall upgrades","finishes"],[-50000,"Golf course","golf"],[-25000,"No road backing","road"],[25000,"Age","agelot"],[10000,"Lot","agelot"]],
+  why:"Strong layout match, but significantly more updated and better rear setting."},
+ {id:"neth6893",short:"Netherland 6893",addr:"6893 S Netherland Way",url:"https://www.zillow.com/homedetails/6893-S-Netherland-Way-Aurora-CO-80016/58884405_zpid/",year:2003,ag:4330,fin:5884,acre:.29,sold:1375000,conc:0,
+  adj:[[-10000,"Larger above-grade area","size"],[-50000,"Golf course","golf"],[-20000,"No road backing","road"],[-25000,"Condition/updates","finishes"],[10000,"Age","agelot"],[5000,"Lot","agelot"]],
+  why:"Strong size and floor-plan comparison with a premium location."},
+ {id:"neth7009",short:"Netherland 7009",addr:"7009 S Netherland Way",url:"https://www.zillow.com/homedetails/7009-S-Netherland-Way-Aurora-CO-80016/58884411_zpid/",year:2003,ag:4391,fin:6153,acre:.23,sold:1320000,conc:0,
+  adj:[[-40000,"Golf course setting with road beyond","golf"],[-20000,"Fourth garage bay","garage"],[-20000,"Flooring","finishes"],[-15000,"Condition","finishes"],[5000,"Lot","agelot"]],
+  why:"Premium golf-course setting and four-car garage, with modestly superior finishes."},
+ {id:"quemoy",short:"Quemoy",addr:"6615 S Quemoy Circle",url:"https://www.zillow.com/homedetails/6615-S-Quemoy-Cir-Aurora-CO-80016/13122383_zpid/",year:2000,ag:4302,fin:6623,acre:.32,sold:1210000,conc:41000,
+  adj:[[-25000,"Larger home/basement","size"],[15000,"Subject condition advantages","finishes"],[-50000,"Golf course","golf"],[-20000,"No road backing","road"],[10000,"Age","agelot"],[5000,"Lot","agelot"]],
+  why:"Similar broad finish level, with larger finished space and premium golf frontage."},
+ {id:"sicily",short:"Sicily",addr:"7230 S Sicily Court",url:"https://www.zillow.com/homedetails/7230-S-Sicily-Ct-Aurora-CO-80016/87624241_zpid/",year:2008,ag:4072,fin:4072,acre:.27,sold:950000,conc:0,
+  adj:[[20000,"Subject walkout","basement"],[-25000,"Additional bathroom","size"],[10000,"Lot","agelot"],[80000,"Subject finished basement","basement"]],
+  why:"Particularly informative because it shares the road-exposure setting; finishes and above-grade size are similar."},
+ {id:"valdai",short:"Valdai",addr:"7317 S Valdai Circle",url:"https://www.zillow.com/homedetails/7317-S-Valdai-Cir-Aurora-CO-80016/54647781_zpid/",year:2002,ag:4031,fin:4031,acre:.25,sold:988000,conc:42000,
+  adj:[[25000,"Exterior appearance","finishes"],[25000,"Interior wear/finishes","finishes"],[80000,"Finished basement","basement"],[10000,"Age","agelot"],[5000,"Lot","agelot"],[-25000,"Quieter rear setting","road"]],
+  why:"Sold with a substantial seller concession and has an unfinished walkout basement."},
+ {id:"hinsdale",short:"Hinsdale",addr:"22175 E Hinsdale Avenue",url:"https://www.zillow.com/homedetails/22175-E-Hinsdale-Ave-Aurora-CO-80016/13122756_zpid/",year:2004,ag:3880,fin:3880,acre:.24,sold:815000,conc:1640,
+  adj:[[80000,"Finished basement","basement"],[25000,"Size","size"],[50000,"Third garage bay","garage"],[-25000,"Selected finishes","finishes"],[5000,"Lot","agelot"],[-25000,"Rear setting","road"]],
+  why:"Less finished space and only two garage spaces; unfinished basement does have walkout access."},
+ {id:"picadilly",short:"Picadilly",addr:"6924 S Picadilly Street",url:"https://www.zillow.com/homedetails/6924-S-Picadilly-St-Aurora-CO-80016/67445341_zpid/",year:2004,ag:3802,fin:3802,acre:.21,sold:1015000,conc:0,
+  adj:[[10000,"Age","agelot"],[-50000,"Golf course","golf"],[80000,"Finished basement","basement"],[10000,"Lot","agelot"],[-150000,"Extensively superior interior","finishes"],[-25000,"Quieter setting","road"]],
+  why:"Beautiful finishes and golf-course location, but no finished basement and a much smaller lot."}
+];
+comps.forEach(c=>{c.net=c.sold-c.conc;c.total=c.adj.reduce((s,a)=>s+a[0],0);c.adjusted=c.net+c.total;c.on=true});
+
+const $=s=>document.querySelector(s);
+const fmt=v=>(v<0?"−":"")+"$"+Math.abs(Math.round(v)).toLocaleString("en-US");
+const fmtD=v=>(v>0?"+":"−")+"$"+Math.abs(Math.round(v)).toLocaleString("en-US");
+const fmtK=v=>v===0?"$0 net":(v>0?"+":"−")+"$"+(Math.abs(v)/1000).toLocaleString("en-US",{maximumFractionDigits:2})+"K";
+const esc=s=>String(s).replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]));
+const tick=t=>t>=1e6?"$"+(t/1e6).toFixed(t%1e5?2:1)+"M":"$"+t/1000+"K";
+const median=a=>{if(!a.length)return null;const s=[...a].sort((x,y)=>x-y),m=s.length>>1;return s.length%2?s[m]:(s[m-1]+s[m])/2};
+
+/* tooltip */
+const tip=$("#tip");
+function showTip(html,e){tip.innerHTML=html;tip.style.opacity=1;moveTip(e)}
+function moveTip(e){const w=tip.offsetWidth,h=tip.offsetHeight;let x=e.clientX+14,y=e.clientY+14;
+  if(x+w>innerWidth-8)x=e.clientX-w-14; if(y+h>innerHeight-8)y=e.clientY-h-14; tip.style.left=x+"px";tip.style.top=y+"px"}
+function hideTip(){tip.style.opacity=0}
+
+/* ---------- hero strip ---------- */
+const sorted=[...comps].sort((a,b)=>a.adjusted-b.adjusted);
+sorted.forEach((c,i)=>c.lane=i%4);
+const chips=$("#chips");
+comps.forEach(c=>{const b=document.createElement("button");b.className="chip";b.dataset.id=c.id;b.textContent=c.short;
+  b.addEventListener("click",()=>{c.on=!c.on;updateHero()});chips.appendChild(b)});
+document.querySelectorAll(".preset").forEach(b=>b.addEventListener("click",()=>{
+  const p=b.dataset.preset;
+  if(p==="all")comps.forEach(c=>c.on=true);
+  if(p==="nogolf")comps.forEach(c=>c.on=!c.adj.some(a=>a[2]==="golf"));
+  if(p==="trim"){const lo=sorted[0].id,hi=sorted[sorted.length-1].id;comps.forEach(c=>c.on=c.id!==lo&&c.id!==hi)}
+  updateHero();
+}));
+
+function drawStrip(){
+  const svg=$("#strip"),W=Math.max(300,$("#strip-wrap").clientWidth),narrow=W<560;
+  const H=262,L=12,R=12,lo=860000,hi=1310000;
+  const x=v=>L+(v-lo)/(hi-lo)*(W-L-R);
+  const lanes=[76,110,144,178],axisY=H-36;
+  const on=comps.filter(c=>c.on).map(c=>c.adjusted),med=median(on);
+  let s="";
+  // gridlines + ticks
+  for(let t=900000;t<=1300000;t+=50000){const xx=x(t);
+    s+=`<line x1="${xx}" x2="${xx}" y1="44" y2="${axisY}" stroke="var(--line)" stroke-width="1"/>`;
+    if(!narrow||t%100000===0)s+=`<text x="${xx}" y="${axisY+20}" text-anchor="middle">${tick(t)}</text>`}
+  s+=`<line x1="${L}" x2="${W-R}" y1="${axisY}" y2="${axisY}" stroke="var(--fg)" stroke-width="1"/>`;
+  // gap band between contract and median
+  if(med!=null){
+    const a=x(Math.min(CONTRACT,med)),b=x(Math.max(CONTRACT,med));
+    s+=`<rect x="${a}" y="44" width="${b-a}" height="${axisY-44}" fill="var(--accent)" opacity=".07"/>`;
+  }
+  // net (price less credit)
+  const xn=x(NET);
+  s+=`<line x1="${xn}" x2="${xn}" y1="30" y2="${axisY}" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="4 4"/>`;
+  s+=`<circle id="mk-net" cx="${xn}" cy="30" r="5" fill="var(--bg)" stroke="var(--accent)" stroke-width="2"/>`;
+  // contract
+  const xc=x(CONTRACT);
+  s+=`<line x1="${xc}" x2="${xc}" y1="14" y2="${axisY}" stroke="var(--accent)" stroke-width="2.5"/>`;
+  s+=`<circle id="mk-contract" cx="${xc}" cy="14" r="6" fill="var(--accent)"/>`;
+  // median
+  if(med!=null){
+    const xm=x(med),right=xm>W-150;
+    s+=`<line x1="${xm}" x2="${xm}" y1="40" y2="${axisY}" stroke="var(--fg)" stroke-width="2"/>`;
+    s+=`<text x="${right?xm-8:xm+8}" y="52" text-anchor="${right?"end":"start"}" style="fill:var(--fg);font-weight:700;font-size:13px">Median ${fmt(med)}</text>`;
+    // bracket
+    const by=axisY-12,a=Math.min(xc,xm),b=Math.max(xc,xm);
+    if(b-a>24){
+      s+=`<path d="M${a+3} ${by-5}V${by}H${b-3}V${by-5}" fill="none" stroke="var(--accent)" stroke-width="1.5"/>`;
+      s+=`<text x="${(a+b)/2}" y="${by-8}" text-anchor="middle" style="fill:var(--accent);font-weight:700">${fmt(Math.abs(med-CONTRACT))}</text>`;
+    }
+  }
+  // dots
+  comps.forEach(c=>{
+    const cx=x(c.adjusted),cy=lanes[c.lane],endSide=cx>W-120;
+    s+=`<g class="dot" data-id="${c.id}" tabindex="0" role="button" aria-pressed="${c.on}" aria-label="${esc(c.addr)}, adjusted ${fmt(c.adjusted)}">`+
+      `<circle cx="${cx}" cy="${cy}" r="14" fill="transparent"/>`+
+      `<circle cx="${cx}" cy="${cy}" r="7" fill="${c.on?"var(--data)":"var(--bg)"}" stroke="${c.on?"var(--data)":"var(--muted)"}" stroke-width="1.5" ${c.on?"":'stroke-dasharray="2 2"'}/>`+
+      `<text class="lbl" x="${endSide?cx-12:cx+12}" y="${cy+4}" text-anchor="${endSide?"end":"start"}" style="${c.on?"":"fill:var(--muted);text-decoration:line-through"}">${esc(c.short)}</text></g>`;
+  });
+  svg.setAttribute("viewBox",`0 0 ${W} ${H}`);svg.setAttribute("width",W);svg.setAttribute("height",H);
+  svg.innerHTML=s;
+  svg.querySelectorAll(".dot").forEach(g=>{
+    const c=comps.find(k=>k.id===g.dataset.id);
+    const toggle=()=>{c.on=!c.on;updateHero()};
+    g.addEventListener("click",toggle);
+    g.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();toggle()}});
+    g.addEventListener("mousemove",e=>showTip(`<b>${esc(c.addr)}</b><br>Adjusted value ${fmt(c.adjusted)}<br>${c.on?"Select to leave out":"Select to include"}`,e));
+    g.addEventListener("mouseleave",hideTip);
+  });
+}
+function updateHero(){
+  const on=comps.filter(c=>c.on),vals=on.map(c=>c.adjusted),med=median(vals);
+  chips.querySelectorAll(".chip").forEach(b=>{const c=comps.find(k=>k.id===b.dataset.id);b.setAttribute("aria-pressed",c.on);b.classList.toggle("off",!c.on)});
+  $("#ro-n").textContent=on.length;
+  if(med==null){$("#ro-median").textContent="None selected";$("#ro-gap").textContent="Select at least one sale"}
+  else{$("#ro-median").textContent=fmt(med);const d=med-CONTRACT;$("#ro-gap").textContent=d===0?"Even with it":fmt(Math.abs(d))+(d>0?" below":" above")}
+  const above=vals.filter(v=>v>CONTRACT).length;
+  $("#above-count").textContent=on.length?`${above} of the ${on.length}`:"None of the";
+  drawStrip();requestDraw();
+}
+
+/* ---------- explorer ---------- */
+const list=$("#comp-list");let current=comps[0];
+comps.forEach(c=>{const b=document.createElement("button");b.className="comp-btn";b.dataset.id=c.id;
+  b.innerHTML=`<span>${esc(c.addr)}</span><span>${fmt(c.adjusted)}</span>`;
+  b.addEventListener("click",()=>{current=c;renderDetail()});list.appendChild(b)});
+function renderDetail(){
+  const c=current;
+  list.querySelectorAll(".comp-btn").forEach(b=>b.setAttribute("aria-pressed",b.dataset.id===c.id));
+  $("#d-name").textContent=c.addr;$("#d-link").href=c.url;$("#d-link").textContent="View "+c.addr+" on Zillow";
+  $("#d-specs").innerHTML=[["Built",c.year],["Above grade (sq ft)",c.ag.toLocaleString()],["Finished (sq ft)",c.fin.toLocaleString()],["Lot",c.acre+" acre"]]
+    .map(([k,v])=>`<div><dt>${k}</dt><dd>${v}</dd></div>`).join("");
+  $("#d-why").textContent=c.why;
+  // steps
+  const rows=[];let run;
+  if(c.conc>0){rows.push({l:"Sold price",total:c.sold});rows.push({l:"Seller concessions",d:-c.conc,conc:true});rows.push({l:"Net closing price",total:c.net,bold:true})}
+  else rows.push({l:"Net closing price",total:c.net,bold:true,sub:"No seller concessions"});
+  run=c.net;rows.push({sep:true});
+  c.adj.forEach(a=>rows.push({l:a[1],d:a[0]}));
+  rows.push({sep:true});rows.push({l:"Adjusted value",total:c.adjusted,final:true});
+  // domain
+  let pts=[c.sold,c.net,CONTRACT];let r=c.net;c.adj.forEach(a=>{r+=a[0];pts.push(r)});
+  const lo=Math.floor((Math.min(...pts)-60000)/50000)*50000,hi=Math.ceil((Math.max(...pts)+20000)/50000)*50000;
+  const pct=v=>((v-lo)/(hi-lo)*100);
+  let h="",prev=c.sold;
+  rows.forEach(rw=>{
+    if(rw.sep){h+=`<div class="sep"></div>`;return}
+    let bar;
+    if(rw.total!=null){bar=`<div class="bar ${rw.final?"final":"total"}" ${rw.final?'id="wf-final"':""} style="left:0;width:${pct(rw.total)}%"></div>`;prev=rw.total}
+    else{const a=prev,b=prev+rw.d;bar=`<div class="bar ${rw.conc?"conc":rw.d>0?"pos":"neg"}" style="left:${pct(Math.min(a,b))}%;width:${Math.max(.6,Math.abs(pct(b)-pct(a)))}%"></div>`;prev=b}
+    const ref=`<div class="ref" style="left:${pct(CONTRACT)}%"></div>`;
+    const val=rw.total!=null?fmt(rw.total):fmtK(rw.d);
+    const cls=rw.total!=null?"is-total":"";
+    h+=`<div class="l ${rw.bold||rw.final?"is-total":""}">${esc(rw.l)}${rw.sub?`<br><span class="small">${rw.sub}</span>`:""}</div><div class="t">${ref}${bar}</div><div class="v ${cls} ${rw.d>0?"adj-pos":rw.d<0?"adj-neg":""}">${val}</div>`;
+  });
+  h+=`<div></div><div class="small" style="display:flex;justify-content:space-between;padding-top:4px"><span>${fmt(lo)}</span><span>${fmt(hi)}</span></div><div></div>`;
+  $("#wf").innerHTML=h;
+  requestDraw();
+}
+
+/* ---------- table ---------- */
+let sortKey=null,sortDir=1;
+const maxAdj=Math.max(...comps.map(c=>c.adjusted));
+function renderTable(){
+  let rows=[...comps];
+  if(sortKey)rows.sort((a,b)=>(sortKey==="addr"?a.addr.localeCompare(b.addr):a[sortKey]-b[sortKey])*sortDir);
+  $("#tbl tbody").innerHTML=rows.map(c=>{
+    const w=Math.round((c.adjusted-800000)/(maxAdj-800000)*90)+10;
+    return `<tr><td><a href="${c.url}" target="_blank" rel="noopener">${esc(c.addr)}</a>${c.conc>=40000?`<span class="flag">Concession ${fmt(c.conc)}</span>`:""}</td>
+    <td class="num" id="net-${c.id}">${fmt(c.net)}</td>
+    <td class="num ${c.total>0?"adj-pos":"adj-neg"}">${fmtD(c.total)}</td>
+    <td><strong>${fmt(c.adjusted)}</strong><span class="minibar" style="width:${w}px;${c.adjusted>=CONTRACT?"":"opacity:.35"}"></span></td></tr>`}).join("");
+  document.querySelectorAll("#tbl th button").forEach(b=>{if(b.dataset.sort===sortKey)b.dataset.dir=sortDir>0?"↑":"↓";else delete b.dataset.dir});
+  requestDraw();
+}
+document.querySelectorAll("#tbl th button").forEach(b=>b.addEventListener("click",()=>{
+  const k=b.dataset.sort;if(sortKey===k)sortDir*=-1;else{sortKey=k;sortDir=k==="addr"?1:-1}renderTable()}));
+$("#tf-median").textContent=fmt(median(comps.map(c=>c.adjusted)));
+
+/* ---------- patterns ---------- */
+let activeCat=null;
+const catTotals={};Object.keys(CAT).forEach(k=>catTotals[k]={sum:0,n:new Set()});
+comps.forEach(c=>c.adj.forEach(a=>{catTotals[a[2]].sum+=a[0];catTotals[a[2]].n.add(c.id)}));
+const legend=$("#legend");
+Object.keys(CAT).forEach(k=>{const b=document.createElement("button");b.dataset.cat=k;b.setAttribute("aria-pressed","false");
+  const t=catTotals[k];b.innerHTML=`<i style="background:var(--c-${k})"></i>${CAT[k].name}<span>${fmtK(t.sum)} across ${t.n.size}</span>`;
+  b.addEventListener("click",()=>{activeCat=activeCat===k?null:k;renderPatterns()});legend.appendChild(b)});
+function renderPatterns(){
+  legend.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.cat===activeCat));
+  const M=240000,pct=v=>v/M*50;let h="";
+  comps.forEach(c=>{
+    let neg=0,pos=0,segs="";
+    [...c.adj].sort((a,b)=>Object.keys(CAT).indexOf(a[2])-Object.keys(CAT).indexOf(b[2])).forEach(a=>{
+      const w=pct(Math.abs(a[0]));let left;
+      if(a[0]<0){neg+=Math.abs(a[0]);left=50-pct(neg)}else{left=50+pct(pos);pos+=a[0]}
+      const dim=activeCat&&activeCat!==a[2]?" dim":"";
+      segs+=`<div class="seg${dim}" data-tip="${esc(a[1])}: ${fmtK(a[0])}" style="left:${left}%;width:${w}%;background:var(--c-${a[2]});box-shadow:inset -1px 0 0 var(--bg)"></div>`;
+    });
+    const shown=activeCat?c.adj.filter(a=>a[2]===activeCat).reduce((s,a)=>s+a[0],0):c.total;
+    h+=`<div>${esc(c.short)}</div><div class="t"><div class="axis"></div>${segs}</div><div class="v ${shown>0?"adj-pos":shown<0?"adj-neg":""}">${shown===0?"—":fmtK(shown)}</div>`;
+  });
+  h+=`<div></div><div class="div-scale"><span>−$240K</span><span>adjusted down | adjusted up</span><span>+$240K</span></div><div></div>`;
+  const el=$("#divchart");el.innerHTML=h;
+  el.querySelectorAll(".seg").forEach(s=>{s.addEventListener("mousemove",e=>showTip(s.dataset.tip,e));s.addEventListener("mouseleave",hideTip)});
+}
+
+/* ---------- riviera ---------- */
+const slider=$("#riv-slider");
+function renderRiv(){
+  const sale=+slider.value,imp=sale-350000;
+  $("#riv-sale").textContent=fmt(sale);
+  $("#riv-eq").innerHTML=`${fmt(sale)} hypothetical sale − $350,000 in advantages = <b>${fmt(imp)}</b> implied for Easter Circle`;
+  const svg=$("#riv-scale"),W=Math.max(280,svg.parentNode.clientWidth-44),H=70,L=6,R=6,lo=840000,hi=1100000;
+  const x=v=>L+(v-lo)/(hi-lo)*(W-L-R);const med=median(comps.map(c=>c.adjusted));
+  let s=`<rect x="${x(900000)}" y="18" width="${x(950000)-x(900000)}" height="22" fill="var(--accent)" opacity=".12"/>`;
+  s+=`<line x1="${L}" x2="${W-R}" y1="40" y2="40" stroke="var(--fg)"/>`;
+  [850000,900000,950000,1000000,1050000,1100000].forEach(t=>s+=`<text x="${x(t)}" y="58" text-anchor="middle">${tick(t)}</text>`);
+  s+=`<line x1="${x(CONTRACT)}" x2="${x(CONTRACT)}" y1="10" y2="40" stroke="var(--accent)" stroke-width="2"/><text x="${x(CONTRACT)+4}" y="10" style="fill:var(--accent)">Your price</text>`;
+  s+=`<line x1="${x(med)}" x2="${x(med)}" y1="10" y2="40" stroke="var(--fg)" stroke-width="2"/><text x="${x(med)-4}" y="10" text-anchor="end" style="fill:var(--fg)">Median</text>`;
+  s+=`<circle cx="${x(Math.max(lo,Math.min(hi,imp)))}" cy="29" r="7" fill="var(--data)" stroke="var(--bg)" stroke-width="2"/>`;
+  svg.setAttribute("viewBox",`0 0 ${W} ${H}`);svg.setAttribute("width",W);svg.setAttribute("height",H);svg.innerHTML=s;
+}
+slider.addEventListener("input",renderRiv);
+
+/* ---------- hand-drawn arrows ---------- */
+let raf=0;function requestDraw(){cancelAnimationFrame(raf);raf=requestAnimationFrame(drawArrows)}
+function seeded(i){const v=Math.sin(i*91.7+3.3)*43758.5453;return v-Math.floor(v)}
+function drawArrows(){
+  const page=$("#page"),svg=$("#ink"),pr=page.getBoundingClientRect();
+  const W=page.scrollWidth,H=page.scrollHeight;
+  svg.setAttribute("width",W);svg.setAttribute("height",H);svg.setAttribute("viewBox",`0 0 ${W} ${H}`);
+  const rel=r=>({x:r.left-pr.left,y:r.top-pr.top,w:r.width,h:r.height});
+  let out="";
+  document.querySelectorAll(".note[data-target]").forEach((n,i)=>{
+    const t=document.querySelector(n.dataset.target);if(!t||!t.getClientRects().length)return;
+    const N=rel(n.getBoundingClientRect()),T=rel(t.getBoundingClientRect());
+    const tc={x:T.x+T.w/2,y:T.y+T.h/2};
+    let s;const cy=Math.max(N.y+12,Math.min(tc.y,N.y+N.h-10));
+    if(T.x+T.w<N.x-4)s={x:N.x-10,y:cy};
+    else if(T.x>N.x+N.w+4)s={x:N.x+N.w+10,y:cy};
+    else if(tc.y>N.y+N.h)s={x:Math.max(N.x+20,Math.min(tc.x,N.x+N.w-20)),y:N.y+N.h+6};
+    else s={x:Math.max(N.x+20,Math.min(tc.x,N.x+N.w-20)),y:N.y-6};
+    // nearest point on target box
+    let e={x:Math.max(T.x,Math.min(s.x,T.x+T.w)),y:Math.max(T.y,Math.min(s.y,T.y+T.h))};
+    if(e.x===s.x&&e.y===s.y)return;
+    let dx=e.x-s.x,dy=e.y-s.y,len=Math.hypot(dx,dy);
+    if(len<14)return;
+    if(len>(innerWidth<860?260:560))return;
+    const gap=7;e={x:e.x-dx/len*gap,y:e.y-dy/len*gap};dx=e.x-s.x;dy=e.y-s.y;len=Math.hypot(dx,dy);
+    const bend=(+n.dataset.bend||1)*(0.2+seeded(i)*0.12)*len;
+    const nx=-dy/len,ny=dx/len;
+    const c={x:s.x+dx*.5+nx*bend,y:s.y+dy*.5+ny*bend};
+    // slight wobble start
+    const s2={x:s.x+(seeded(i+5)-.5)*3,y:s.y+(seeded(i+7)-.5)*3};
+    out+=`<path d="M${s2.x.toFixed(1)} ${s2.y.toFixed(1)} Q${c.x.toFixed(1)} ${c.y.toFixed(1)} ${e.x.toFixed(1)} ${e.y.toFixed(1)}"/>`;
+    const ang=Math.atan2(e.y-c.y,e.x-c.x),hl=10,sp=0.48;
+    const p1={x:e.x-hl*Math.cos(ang-sp),y:e.y-hl*Math.sin(ang-sp)},p2={x:e.x-hl*Math.cos(ang+sp),y:e.y-hl*Math.sin(ang+sp)};
+    out+=`<path d="M${p1.x.toFixed(1)} ${p1.y.toFixed(1)} L${e.x.toFixed(1)} ${e.y.toFixed(1)} L${p2.x.toFixed(1)} ${p2.y.toFixed(1)}"/>`;
+  });
+  svg.innerHTML=out;
+}
+
+/* ---------- init ---------- */
+updateHero();renderDetail();renderTable();renderPatterns();renderRiv();
+let rt;addEventListener("resize",()=>{clearTimeout(rt);rt=setTimeout(()=>{drawStrip();renderRiv();requestDraw()},80)});
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{drawStrip();requestDraw()});
+if("ResizeObserver" in window)new ResizeObserver(requestDraw).observe($("#page"));
+})();
+</script>
+</body>
+</html>
